@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dotnet workloads
         run: |
-          dotnet workload install maui --ignore-failed-sources --version 9.0.300
+          dotnet workload install maui --ignore-failed-sources
 
       - name: Restore dependencies
         run: dotnet restore ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj
