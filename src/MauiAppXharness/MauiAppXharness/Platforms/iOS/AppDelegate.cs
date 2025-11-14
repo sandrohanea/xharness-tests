@@ -1,40 +1,37 @@
-﻿using Foundation;
-using MauiAppXharness;
+﻿// Licensed under the MIT license: https://opensource.org/licenses/MIT
+
+using Foundation;
 using Microsoft.DotNet.XHarness.TestRunners.Common;
 using Microsoft.DotNet.XHarness.TestRunners.Xunit;
-using Microsoft.Maui.LifecycleEvents;
 using UIKit;
 
 namespace MauiAppXharness;
 
-[Register("AppDelegate")]
-public class AppDelegate : MauiUIApplicationDelegate
+[Register(nameof(TestApplicationDelegate))]
+public class TestApplicationDelegate : UIApplicationDelegate
 {
-    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp(null, events =>
-    {
-        events.AddiOS(i =>
-        {
-            i.FinishedLaunching((app, options) =>
-            {
-                // Fire and forget on-device tests
-                _ = RunAsync();
-                return true;
-            });
-        });
-    });
+    public override UIWindow? Window { get; set; }
 
-
-    private static async Task RunAsync()
+    public override bool FinishedLaunching(UIApplication application, NSDictionary? launchOptions)
     {
-        try
+        Window = new UIWindow(UIScreen.MainScreen.Bounds)
         {
+            RootViewController = new ViewController()
+        };
+        Window.MakeKeyAndVisible();
+
+        return true;
+    }
+
+    class ViewController : UIViewController
+    {
+        public override async void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+
             var entryPoint = new TestsEntryPoint();
-            await entryPoint.RunAsync().ConfigureAwait(false);
-        }
-        catch (Exception e)
-        {
-            // Exit the app
-            Console.WriteLine(e);
+
+            await entryPoint.RunAsync();
         }
     }
 
