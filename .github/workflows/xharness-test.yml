@@ -1,5 +1,9 @@
 on:
   workflow_dispatch:
+    
+  push: 
+    branches: [ main ]
+
 jobs:
   dotnet10-maui-ios:
     runs-on: macos-26
