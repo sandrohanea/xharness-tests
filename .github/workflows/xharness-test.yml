@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
 jobs:
   dotnet-maui-build-test:
-    runs-on: macos-15
+    runs-on: macos-26
 
     steps:
       - uses: actions/checkout@v4
@@ -15,7 +15,7 @@ jobs:
 
       - uses: maxim-lobanov/setup-xcode@7f352e61cbe8130c957c3bc898c4fb025784ea1e
         with:
-          xcode-version: '26.0'
+          xcode-version: '26.1'
 
       - name: Install dotnet workloads
         run: |
@@ -28,7 +28,7 @@ jobs:
         run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
 
       - name: Ensure simulator
-        run: xharness apple simulators install ios-simulator_26.0
+        run: xharness apple simulators install ios-simulator_26.1
 
       - name: Build ios-simulator
         run: dotnet build ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj -c Debug -f net10.0-ios -r iossimulator-arm64 -p:EmbedAssembliesIntoAppBundle=true -p:CodesignKey="" -p:CodesignProvision=""
