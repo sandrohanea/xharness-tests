@@ -86,6 +86,6 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: xharness-ios-test-results
+          name: xharness-ios-test-results-rc2
           path: |
             ./test-results/*
