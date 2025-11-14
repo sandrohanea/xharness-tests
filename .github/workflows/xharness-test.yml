@@ -62,7 +62,7 @@ jobs:
 
       - name: Install dotnet workloads
         run: |
-          dotnet workload install maui --ignore-failed-sources --version 10.0.100-rc.2
+          dotnet workload install maui --ignore-failed-sources --version 10.0.100-rc.2.25513.4.
       - name: Restore dependencies
         run: dotnet restore ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj
 
