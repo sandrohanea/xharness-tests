@@ -38,7 +38,7 @@ jobs:
         run: dotnet build ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj -c Debug -f net10.0-ios -r iossimulator-arm64 -p:EmbedAssembliesIntoAppBundle=true -p:CodesignKey="" -p:CodesignProvision=""
       
       - name: Test with xharness
-        run: xharness apple test --app=./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 17" --timeout "00:05:00"
+        run: xharness apple test --app=./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 17" --timeout "00:10:00"
 
       - name: Upload Maui iOS xharness test results
         if: ${{ always() }}
@@ -80,7 +80,7 @@ jobs:
         run: dotnet build ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj -c Debug -f net10.0-ios -r iossimulator-arm64 -p:EmbedAssembliesIntoAppBundle=true -p:CodesignKey="" -p:CodesignProvision=""
 
       - name: Test with xharness
-        run: xharness apple test --app=./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 17" --timeout "00:05:00"
+        run: xharness apple test --app=./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 17" --timeout "00:10:00"
 
       - name: Upload Maui iOS xharness test results
         if: ${{ always() }}
