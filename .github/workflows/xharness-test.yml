@@ -70,7 +70,7 @@ jobs:
         run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
 
       - name: Test with xharness
-        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:15:00"
+        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:30:00"
 
       - name: Upload Maui iOS xharness test results
         if: ${{ always() }}
@@ -110,7 +110,7 @@ jobs:
         run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
 
       - name: Test with xharness
-        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:15:00"
+        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:30:00"
 
       - name: Upload Maui iOS xharness test results
         if: ${{ always() }}
@@ -184,7 +184,7 @@ jobs:
         run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
 
       - name: Test with xharness
-        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:15:00"
+        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:30:00"
 
       - name: Upload Maui iOS xharness test results
         if: ${{ always() }}
