@@ -7,7 +7,7 @@ on:
 jobs:
   
   dotnet10-maui-build-rc2-macos15:
-    name: Build Maui RC2 App on iOS Simulator from xcode 26 on macos 15
+    name: Build Maui 10RC2 App from xcode 26 on macos 15
     runs-on: macos-15
 
     steps:
@@ -41,8 +41,8 @@ jobs:
             ./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXharness.app
 
 
-  dotnet10-rc2-maui-preview-sim16-xcode16-4-macos15:
-    name: Test Maui RC2 App on iOS Simulator iphone 16 from xcode 16.4 (working)
+  dotnet10-rc2-maui-preview-xcode16-4-macos15:
+    name: Test Maui 10RC2 App from xcode 16.4 (working) on macos 15
     runs-on: macos-15
     needs: dotnet10-maui-build-rc2-macos15
 
@@ -70,7 +70,7 @@ jobs:
         run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
 
       - name: Test with xharness
-        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:10:00"
+        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:15:00"
 
       - name: Upload Maui iOS xharness test results
         if: ${{ always() }}
@@ -81,8 +81,8 @@ jobs:
             ./test-results/*  
             
   
-  dotnet10-rc2-maui-preview-sim17-xcode26-1-macos26:
-    name: Test Maui RC2 App on iOS Simulator iphone 17 from xcode 26.1
+  dotnet10-rc2-maui-preview-sim16-xcode26-1-macos26:
+    name: Test Maui 10RC2 App from xcode 26.1 on macos 26
     runs-on: macos-26
     needs: dotnet10-maui-build-rc2-macos15
     
@@ -110,7 +110,7 @@ jobs:
         run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
 
       - name: Test with xharness
-        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 17" --timeout "00:10:00"
+        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:15:00"
 
       - name: Upload Maui iOS xharness test results
         if: ${{ always() }}
@@ -122,6 +122,7 @@ jobs:
 
   dotnet10-maui-build:
     runs-on: macos-26
+    name: Build Maui 10 App from xcode 26.1 on macos 26
 
     steps:
       - uses: actions/checkout@v4
@@ -154,8 +155,8 @@ jobs:
             ./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXharness.app
   
   
-  dotnet10-maui-sim17-xcode26-1-macos26:
-    name: Test Maui RC2 App on iOS Simulator iphone 17 from xcode 26.1
+  dotnet10-maui-xcode26-1-macos26:
+    name: Test Maui 10 App from xcode 26.1 from macos 26
     runs-on: macos-26
     needs: dotnet10-maui-build
     
@@ -183,7 +184,7 @@ jobs:
         run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
 
       - name: Test with xharness
-        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 17" --timeout "00:10:00"
+        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:15:00"
 
       - name: Upload Maui iOS xharness test results
         if: ${{ always() }}
