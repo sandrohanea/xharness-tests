@@ -6,7 +6,7 @@ on:
 
 jobs:
   
-  dotnet10-maui-build:
+  dotnet10-maui-build-rc2:
     runs-on: macos-26
 
     steps:
@@ -16,15 +16,15 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            10.0.x
+            10.0.100-rc.2.25502.107
 
       - uses: maxim-lobanov/setup-xcode@7f352e61cbe8130c957c3bc898c4fb025784ea1e
         with:
-          xcode-version: '26.1'
+          xcode-version: '26.0'
 
-      - name: Install dotnet workloads
+      - name: Install dotnet workloads 
         run: |
-          dotnet workload install maui --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources --version 10.0.100-rc.2.25513.4
 
       - name: Restore dependencies
         run: dotnet restore ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj
@@ -32,16 +32,16 @@ jobs:
       - name: Build ios-simulator
         run: dotnet build ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj -c Debug -f net10.0-ios -r iossimulator-arm64 -p:EmbedAssembliesIntoAppBundle=true -p:CodesignKey="" -p:CodesignProvision=""
 
-      - name: Upload apk and ios app
+      - name: Upload ios app
         uses: actions/upload-artifact@v4
         with:
-          name: maui-build-artifacts
+          name: maui-build-artifacts-rc2
           path: |
             ./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXharness.app
   
   dotnet10-rc2-maui-preview:
     runs-on: macos-15
-    needs: dotnet10-maui-build
+    needs: dotnet10-maui-build-rc2
     
     steps:
       - uses: actions/checkout@v4
@@ -60,7 +60,7 @@ jobs:
         id: download-artifact
         uses: actions/download-artifact@v4
         with:
-          name: maui-build-artifacts
+          name: maui-build-artifacts-rc2
           path: MauiAppXharness.app
 
       - name: Install xharness
@@ -76,7 +76,39 @@ jobs:
           name: xharness-ios-test-results-rc2
           path: |
             ./test-results/*
-  
+#            
+#  dotnet10-maui-build:
+#    runs-on: macos-26
+#
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Setup .NET
+#        uses: actions/setup-dotnet@v4
+#        with:
+#          dotnet-version: |
+#            10.0.x
+#
+#      - uses: maxim-lobanov/setup-xcode@7f352e61cbe8130c957c3bc898c4fb025784ea1e
+#        with:
+#          xcode-version: '26.1'
+#
+#      - name: Install dotnet workloads
+#        run: |
+#          dotnet workload install maui --ignore-failed-sources
+#
+#      - name: Restore dependencies
+#        run: dotnet restore ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj
+#
+#      - name: Build ios-simulator
+#        run: dotnet build ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj -c Debug -f net10.0-ios -r iossimulator-arm64 -p:EmbedAssembliesIntoAppBundle=true -p:CodesignKey="" -p:CodesignProvision=""
+#
+#      - name: Upload ios app
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: maui-build-artifacts
+#          path: |
+#            ./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXharness.app
 #  
 #  dotnet10-maui-ios:
 #    runs-on: macos-26
