@@ -5,7 +5,8 @@ on:
     branches: [ main ]
 
 jobs:
-  dotnet10-maui-ios:
+  
+  dotnet10-maui-build-rc2:
     runs-on: macos-26
 
     steps:
@@ -15,41 +16,32 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            10.0.x
+            10.0.100-rc.2.25502.107
 
       - uses: maxim-lobanov/setup-xcode@7f352e61cbe8130c957c3bc898c4fb025784ea1e
         with:
-          xcode-version: '26.1'
+          xcode-version: '26.0'
 
       - name: Install dotnet workloads
         run: |
-          dotnet workload install maui --ignore-failed-sources
+          dotnet workload install maui --ignore-failed-sources --version 10.0.100-rc.2.25513.4
 
       - name: Restore dependencies
         run: dotnet restore ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj
 
-      - name: Install xharness
-        run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
-
-      - name: Ensure simulator
-        run: xharness apple simulators install ios-simulator_26.1
-
       - name: Build ios-simulator
         run: dotnet build ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj -c Debug -f net10.0-ios -r iossimulator-arm64 -p:EmbedAssembliesIntoAppBundle=true -p:CodesignKey="" -p:CodesignProvision=""
-      
-      - name: Test with xharness
-        run: xharness apple test --app=./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 17" --timeout "00:10:00"
 
-      - name: Upload Maui iOS xharness test results
-        if: ${{ always() }}
+      - name: Upload apk and ios app
         uses: actions/upload-artifact@v4
         with:
-          name: xharness-ios-test-results
+          name: maui-build-artifacts-rc2
           path: |
-            ./test-results/*
+            ./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXharness.app
   
   dotnet10-rc2-maui-preview:
     runs-on: macos-15
+    needs: dotnet10-maui-build-rc2
     
     steps:
       - uses: actions/checkout@v4
@@ -64,23 +56,18 @@ jobs:
         with:
           xcode-version: '16.4'
 
-      - name: Install dotnet workloads
-        run: |
-          dotnet workload install maui --ignore-failed-sources --version 10.0.100-rc.2.25513.4
-      - name: Restore dependencies
-        run: dotnet restore ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj
+      - name: Download Artifacts
+        id: download-artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: maui-build-artifacts-rc2
+          path: maui-build-artifacts
 
       - name: Install xharness
         run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
 
-      - name: Ensure simulator
-        run: xharness apple simulators install ios-simulator_26.0
-
-      - name: Build ios-simulator
-        run: dotnet build ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj -c Debug -f net10.0-ios -r iossimulator-arm64 -p:EmbedAssembliesIntoAppBundle=true -p:CodesignKey="" -p:CodesignProvision=""
-
       - name: Test with xharness
-        run: xharness apple test --app=./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:10:00"
+        run: xharness apple test --app=./maui-build-artifacts/MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:10:00"
 
       - name: Upload Maui iOS xharness test results
         if: ${{ always() }}
@@ -89,3 +76,48 @@ jobs:
           name: xharness-ios-test-results-rc2
           path: |
             ./test-results/*
+  
+#  
+#  dotnet10-maui-ios:
+#    runs-on: macos-26
+#
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - name: Setup .NET
+#        uses: actions/setup-dotnet@v4
+#        with:
+#          dotnet-version: |
+#            10.0.x
+#
+#      - uses: maxim-lobanov/setup-xcode@7f352e61cbe8130c957c3bc898c4fb025784ea1e
+#        with:
+#          xcode-version: '26.1'
+#
+#      - name: Install dotnet workloads
+#        run: |
+#          dotnet workload install maui --ignore-failed-sources
+#
+#      - name: Restore dependencies
+#        run: dotnet restore ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj
+#
+#      - name: Install xharness
+#        run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
+#
+#      - name: Ensure simulator
+#        run: xharness apple simulators install ios-simulator_26.1
+#
+#      - name: Build ios-simulator
+#        run: dotnet build ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj -c Debug -f net10.0-ios -r iossimulator-arm64 -p:EmbedAssembliesIntoAppBundle=true -p:CodesignKey="" -p:CodesignProvision=""
+#      
+#      - name: Test with xharness
+#        run: xharness apple test --app=./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 17" --timeout "00:10:00"
+#
+#      - name: Upload Maui iOS xharness test results
+#        if: ${{ always() }}
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: xharness-ios-test-results
+#          path: |
+#            ./test-results/*
+#  
