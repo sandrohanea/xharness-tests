@@ -6,8 +6,8 @@ on:
 
 jobs:
   
-  dotnet10-maui-build-rc2:
-    runs-on: macos-26
+  dotnet10-maui-build-rc2-macos15:
+    runs-on: macos-15
 
     steps:
       - uses: actions/checkout@v4
@@ -39,9 +39,10 @@ jobs:
           path: |
             ./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXharness.app
   
-  dotnet10-rc2-maui-preview:
+  dotnet10-rc2-maui-preview-sim16-xcode16-4-macos15:
+    name: Test Maui RC2 App on iOS Simulator iphone 16 from xcode 16.4 (working)
     runs-on: macos-15
-    needs: dotnet10-maui-build-rc2
+    needs: dotnet10-maui-build-rc2-macos15
     
     steps:
       - uses: actions/checkout@v4
