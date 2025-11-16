@@ -62,7 +62,7 @@ jobs:
 
       - uses: maxim-lobanov/setup-xcode@7f352e61cbe8130c957c3bc898c4fb025784ea1e
         with:
-          xcode-version: '26.0'
+          xcode-version: '16.4'
 
       - name: Install dotnet workloads
         run: |
@@ -80,7 +80,7 @@ jobs:
         run: dotnet build ./src/MauiAppXharness/MauiAppXharness/MauiAppXharness.csproj -c Debug -f net10.0-ios -r iossimulator-arm64 -p:EmbedAssembliesIntoAppBundle=true -p:CodesignKey="" -p:CodesignProvision=""
 
       - name: Test with xharness
-        run: xharness apple test --app=./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 17" --timeout "00:10:00"
+        run: xharness apple test --app=./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 16" --timeout "00:10:00"
 
       - name: Upload Maui iOS xharness test results
         if: ${{ always() }}
