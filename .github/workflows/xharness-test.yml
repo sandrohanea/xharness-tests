@@ -7,6 +7,7 @@ on:
 jobs:
   
   dotnet10-maui-build-rc2-macos15:
+    name: Build Maui RC2 App on iOS Simulator from xcode 26 on macos 15
     runs-on: macos-15
 
     steps:
@@ -38,12 +39,13 @@ jobs:
           name: maui-build-artifacts-rc2
           path: |
             ./src/MauiAppXharness/MauiAppXharness/bin/Debug/net10.0-ios/iossimulator-arm64/MauiAppXharness.app
-  
+
+
   dotnet10-rc2-maui-preview-sim16-xcode16-4-macos15:
     name: Test Maui RC2 App on iOS Simulator iphone 16 from xcode 16.4 (working)
     runs-on: macos-15
     needs: dotnet10-maui-build-rc2-macos15
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -74,7 +76,46 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: xharness-ios-test-results-rc2
+          name: xharness-ios-test-results-rc2-macos16
+          path: |
+            ./test-results/*  
+            
+  dotnet10-rc2-maui-preview-sim16-xcode26-1-macos26:
+    name: Test Maui RC2 App on iOS Simulator iphone 17 from xcode 26.1
+    runs-on: macos-26
+    needs: dotnet10-maui-build-rc2-macos15
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.X
+
+      - uses: maxim-lobanov/setup-xcode@7f352e61cbe8130c957c3bc898c4fb025784ea1e
+        with:
+          xcode-version: '26.1'
+
+      - name: Download Artifacts
+        id: download-artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: maui-build-artifacts-rc2
+          path: MauiAppXharness.app
+
+      - name: Install xharness
+        run: dotnet tool install Microsoft.DotNet.XHarness.CLI --global --add-source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-eng/nuget/v3/index.json --version "10.0.0-*"
+
+      - name: Test with xharness
+        run: xharness apple test --app=./MauiAppXHarness.app --output-directory=./test-results/ios --target=ios-simulator-64 --device="iPhone 17" --timeout "00:10:00"
+
+      - name: Upload Maui iOS xharness test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: xharness-ios-test-results-rc2-macos26
           path: |
             ./test-results/*
 #            
