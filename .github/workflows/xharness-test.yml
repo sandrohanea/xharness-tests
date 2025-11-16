@@ -116,7 +116,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: xharness-ios-test-results-rc2-macos26
+          name: xharness-ios-test-results-rc2-macos26-1
           path: |
             ./test-results/*
 
@@ -190,6 +190,6 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: xharness-ios-test-results-rc2-macos26
+          name: xharness-ios-test-results-macos26-1
           path: |
             ./test-results/*
